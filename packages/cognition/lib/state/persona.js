@@ -31,16 +31,30 @@ function writePersona(store, persona) {
 /**
  * 首次运行：把 self.json 里的身份写成人设卡的"初设"，并立即锁定。
  * 之后任何写入都走 appendHistory / 离线修复，不再改 initial。
+ *
+ * 例外：身份**不完整**（缺姓名或缺性别）时不锁定、也不落盘，
+ * 让用户能在设置页完成一次性初始化；否则人设卡会在用户还没填之前就被锁死。
  */
 export function ensurePersona(store, { now = Date.now() } = {}) {
   const existing = loadPersona(store);
   if (existing) return existing;
   const identity = store.self?.identity ?? {};
-  const initial = {
-    name: typeof identity.name === 'string' && identity.name.trim() ? identity.name.trim() : null,
-    gender: typeof identity.gender === 'string' && identity.gender.trim() ? identity.gender.trim() : null,
-    profileText: typeof identity.profileText === 'string' ? identity.profileText : ''
-  };
+  const name = typeof identity.name === 'string' && identity.name.trim() ? identity.name.trim() : null;
+  const gender = typeof identity.gender === 'string' && identity.gender.trim() ? identity.gender.trim() : null;
+  const profileText = typeof identity.profileText === 'string' ? identity.profileText : '';
+  if (!name || !gender) {
+    // 未初始化：返回空人设卡，不写文件，等 setIdentity 补齐后再锁定。
+    return {
+      schema: PERSONA_SCHEMA,
+      initializedAt: null,
+      initial: null,
+      locked: false,
+      lockedAt: null,
+      history: [],
+      version: 0
+    };
+  }
+  const initial = { name, gender, profileText };
   const persona = {
     schema: PERSONA_SCHEMA,
     initializedAt: now,

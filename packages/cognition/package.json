@@ -1,6 +1,6 @@
 {
   "name": "dsh-dshai-cognition",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": false,
   "description": "DSHAI 认知内核：单状态根、事件入口、只读 API、最小循环、模型决策、记忆连续性、人格演化与日记",
   "type": "module",

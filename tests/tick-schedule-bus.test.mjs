@@ -1,4 +1,4 @@
-﻿// bus 集成：时段表 + heartbeat.set 只改当前段 + tick.schedule 只读
+// bus 集成：时段表 + heartbeat.set 只改当前段 + tick.schedule 只读
 import { mkdtempSync, readFileSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -75,10 +75,16 @@ try {
   check('两段时 heartbeat.set 成功', set2?.ok === true, JSON.stringify(set2));
   saved = JSON.parse(readFileSync(file, 'utf8'));
   check('仍是两段', saved.segments.length === 2, JSON.stringify(saved));
-  check('夜间段没有被改', saved.segments[0].tickMs === 2 * 60 * 60_000, JSON.stringify(saved.segments[0]));
+  // 不能假设"当前段就是白天段"：测试在 00:00–08:00 之间跑时，当前段是夜间段。
+  // 按真实小时判断哪一段是当前段，再断言"另一段没被改"。
   const hour = new Date().getHours();
-  const current = hour < 8 ? saved.segments[0] : saved.segments[1];
-  check('只改了当前段', current.tickMs === 60 * 60_000, JSON.stringify({ hour, saved }));
+  const currentIndex = hour < 8 ? 0 : 1;
+  const otherIndex = currentIndex === 0 ? 1 : 0;
+  const expectedOther = currentIndex === 0 ? day.tickMs : night.tickMs;
+  check('非当前段没有被改', saved.segments[otherIndex].tickMs === expectedOther,
+    JSON.stringify({ hour, currentIndex, other: saved.segments[otherIndex] }));
+  check('只改了当前段', saved.segments[currentIndex].tickMs === 60 * 60_000,
+    JSON.stringify({ hour, currentIndex, current: saved.segments[currentIndex] }));
 
   facade.dispose();
 } finally {

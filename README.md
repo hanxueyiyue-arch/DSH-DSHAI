@@ -2,7 +2,7 @@
 
 > **第三方、非官方项目 · Alpha 阶段**
 >
-> 仓库：<https://github.com/hanxueyiyue-arch/DSH-DSHAI> · 最新版本：[v0.4.0](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/tag/v0.4.0)
+> 仓库：<https://github.com/hanxueyiyue-arch/DSH-DSHAI> · 最新版本：[v0.4.1](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/tag/v0.4.1)
 >
 > 这不是 DeepSeek 官方项目，与 DeepSeek / Bilibili 均无隶属或背书关系。
 > 目前处于 Alpha：接口、配置项、数据格式都可能变，已知问题和未完成项在文末列出。
@@ -20,7 +20,7 @@ DSHAI 是跑在 DeepSeek Harness（DSH）上的一组插件：一个会记事、
 
 | 包 | 版本 | 作用 | 运行时依赖 |
 |---|---|---|---|
-| `dsh-dshai-cognition` | 0.4.0 | 认知内核：记忆、倾向、日程、精力、反思、日记 | 无（DSH 提供模型服务） |
+| `dsh-dshai-cognition` | 0.4.1 | 认知内核：记忆、倾向、日程、精力、反思、日记 | 无（DSH 提供模型服务） |
 | `dsh-dshai-bus` | 0.0.12 | 意图总线、用户会话、B 站工具 | 无 |
 | `dsh-dshai-bilibili` | 0.3.16 | B 站只读工具（热门/搜索/视频/字幕/弹幕评论）；可选扫码登录与私信 | `@deepseek-ai/*`（已打包进 Release tgz） |
 | `dsh-dshai-budget` | 0.5.2 | 可选的每日金额硬限额；默认不启用 | 无 |
@@ -48,21 +48,21 @@ Get-ChildItem tests -Filter *.test.mjs | ForEach-Object { node $_.FullName }
 从 [Releases](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases) 下载四个 `.tgz`（版本要和下面一致，对不上会装错分支），然后：
 
 ```powershell
-dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-cognition-0.4.0.tgz
+dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-cognition-0.4.1.tgz
 dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-bus-0.0.12.tgz
 dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-bilibili-0.3.16.tgz
 # 可选
 dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-budget-0.5.2.tgz
 ```
 
-当前版本（v0.4.0）的直链：
+当前版本（v0.4.1）的直链：
 
 | 包 | 下载地址 |
 |---|---|
-| cognition 0.4.0 | [dsh-dshai-cognition-0.4.0.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-cognition-0.4.0.tgz) |
-| bilibili 0.3.16 | [dsh-dshai-bilibili-0.3.16.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-bilibili-0.3.16.tgz) |
-| bus 0.0.12 | [dsh-dshai-bus-0.0.12.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-bus-0.0.12.tgz) |
-| budget 0.5.2 | [dsh-dshai-budget-0.5.2.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-budget-0.5.2.tgz) |
+| cognition 0.4.1 | [dsh-dshai-cognition-0.4.1.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.1/dsh-dshai-cognition-0.4.1.tgz) |
+| bilibili 0.3.16 | [dsh-dshai-bilibili-0.3.16.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.1/dsh-dshai-bilibili-0.3.16.tgz) |
+| bus 0.0.12 | [dsh-dshai-bus-0.0.12.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.1/dsh-dshai-bus-0.0.12.tgz) |
+| budget 0.5.2 | [dsh-dshai-budget-0.5.2.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.1/dsh-dshai-budget-0.5.2.tgz) |
 
 > **bilibili 必须用 tgz 安装。** 它运行时需要 `@deepseek-ai/dsh-tools`、`@deepseek-ai/schemastery` 等包，这些包在 npm 上没有匹配版本，已通过 `bundledDependencies` 打进 tgz 的 `node_modules`。从 git 目录直接安装不会带依赖。
 
@@ -138,9 +138,32 @@ npm pack
 
 bilibili 的 `package.json` 里已声明 `dependencies` + `bundledDependencies`，`npm pack` 会把依赖一并打进 tgz（约 525 KB）。把产物放到 `dist/` 并上传到 GitHub Release。
 
+## 本次更新（2026-11-26）
+
+### cognition 0.4.1：修复"新装用户无法设置身份"
+
+**问题**：全新安装时，人设卡会在用户还没填任何内容之前就被创建并锁定
+（`initial` 全是 null，`locked: true`）。于是设置页点保存会被后端直接拒绝
+（`reason: persona-locked`），而前端仍然提示"身份已保存"——**假成功**。
+
+**修复**：
+
+- 身份不完整（缺姓名或缺性别）时，**不再生成人设文件、也不锁定**，留给用户完成初始化
+- 姓名和性别都填好后，才落盘并锁定；此后写入会被拒绝
+- 设置页现在会显示真实结果：`身份已保存，人设已锁定` / `已保存（性别未填，人设尚未锁定）` / `初始人设已锁定，不能再修改`
+
+**新增回归测试** `tests/persona-init.test.mjs`（25 条断言）：空身份不锁定、部分填写不锁定、
+齐全后锁定、二次读取幂等、锁定后 `appendHistory` 不覆盖 `initial`、`derivedPersona` 从记忆派生。
+
+顺带修掉一个**时间相关的 flaky 测试**：`tick-schedule-bus.test.mjs` 原先假设"当前段一定是白天段"，
+在 00:00–08:00 之间运行必然失败；已改为按真实小时判断。
+
+**说明**：加版本号是因为改了行为（设置页从"假成功"变成真实生效），
+bilibili / bus / budget 版本不变。
+
 ## 本次更新（2026-11-25）
 
-### cognition 0.4.0：记忆更新关系的替换词门槛
+### cognition 0.4.x：记忆更新关系的替换词门槛
 
 同一主题的新记忆要让旧记忆失效（`update`），现在除了标题相似，还要求新内容里出现**明确的替换说法**
 （改成 / 改为 / 换用 / 换成 / 调整成 / 升级到 / 作废 / 取代 / 不再 / 取消 等）。

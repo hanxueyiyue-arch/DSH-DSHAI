@@ -741,7 +741,16 @@ export function createCognitionService({
     if (persona.locked === true) {
       return { ok: false, locked: true, reason: 'persona-locked', persona: personaView(store, { now: clock() }) };
     }
-    return writeIdentity(input);
+    const written = await writeIdentity(input);
+    // 写入后若初始人设已齐（姓名 + 性别），立刻落盘并锁定；不齐就继续留在可编辑状态。
+    const next = ensurePersona(store, { now: clock() });
+    return {
+      ok: true,
+      locked: next.locked === true,
+      reason: next.locked === true ? null : 'persona-incomplete',
+      identity: written,
+      persona: personaView(store, { now: clock() })
+    };
   }
 
   async function status() {

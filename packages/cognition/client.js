@@ -235,11 +235,23 @@ window.__ModuleLoader__.load({
             method: 'POST',
             body: JSON.stringify({ name: form.name.trim(), gender: form.gender, profileText: form.profileText }),
           });
+          // 后端可能拒绝（人设已锁定）：不能再无条件提示"已保存"
+          if (data && data.ok === false) {
+            setErr(data.reason === 'persona-locked'
+              ? '初始人设已锁定，不能再修改（只能后台改文件）'
+              : `身份未保存：${data.reason || '未知原因'}`);
+            await loadOverview();
+            return;
+          }
           setIdentity(data.identity || data);
           await loadOverview();
-          setMsg('身份已保存');
+          if (data && data.locked === false) {
+            setMsg('已保存（性别未填，人设尚未锁定）');
+          } else {
+            setMsg('身份已保存，人设已锁定');
+          }
         } catch (e) { setErr(e.message); }
-        setBusy(false);
+        finally { setBusy(false); }
       }
 
       async function exportData() {
