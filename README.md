@@ -2,6 +2,8 @@
 
 > **第三方、非官方项目 · Alpha 阶段**
 >
+> 仓库：<https://github.com/hanxueyiyue-arch/DSH-DSHAI> · 最新版本：[v0.4.0](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/tag/v0.4.0)
+>
 > 这不是 DeepSeek 官方项目，与 DeepSeek / Bilibili 均无隶属或背书关系。
 > 目前处于 Alpha：接口、配置项、数据格式都可能变，已知问题和未完成项在文末列出。
 >
@@ -43,7 +45,7 @@ Get-ChildItem tests -Filter *.test.mjs | ForEach-Object { node $_.FullName }
 
 ## 安装
 
-从 GitHub Releases 下载对应的 `.tgz`，然后：
+从 [Releases](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases) 下载四个 `.tgz`（版本要和下面一致，对不上会装错分支），然后：
 
 ```powershell
 dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-cognition-0.4.0.tgz
@@ -52,6 +54,15 @@ dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-bilibili-0.3.16.tgz
 # 可选
 dsh plugin --profile <profile> add file:D:\path\to\dsh-dshai-budget-0.5.2.tgz
 ```
+
+当前版本（v0.4.0）的直链：
+
+| 包 | 下载地址 |
+|---|---|
+| cognition 0.4.0 | [dsh-dshai-cognition-0.4.0.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-cognition-0.4.0.tgz) |
+| bilibili 0.3.16 | [dsh-dshai-bilibili-0.3.16.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-bilibili-0.3.16.tgz) |
+| bus 0.0.12 | [dsh-dshai-bus-0.0.12.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-bus-0.0.12.tgz) |
+| budget 0.5.2 | [dsh-dshai-budget-0.5.2.tgz](https://github.com/hanxueyiyue-arch/DSH-DSHAI/releases/download/v0.4.0/dsh-dshai-budget-0.5.2.tgz) |
 
 > **bilibili 必须用 tgz 安装。** 它运行时需要 `@deepseek-ai/dsh-tools`、`@deepseek-ai/schemastery` 等包，这些包在 npm 上没有匹配版本，已通过 `bundledDependencies` 打进 tgz 的 `node_modules`。从 git 目录直接安装不会带依赖。
 
