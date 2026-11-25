@@ -1,0 +1,13 @@
+# dsh-dshai-bus 组合包补丁
+# 默认不自动启用私信轮询；需要时在自己的 profile 里覆盖 ownerSession。
+- insert:
+    - id: cognition-bus
+      name: dsh-dshai-bus
+      config:
+        scheduler:
+          enabled: false
+        ownerSession:
+          enabled: false
+          sendMode: dry-run
+    - id: bus-ui
+      name: dsh-dshai-bus/ui

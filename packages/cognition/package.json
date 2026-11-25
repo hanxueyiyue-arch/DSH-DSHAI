@@ -1,0 +1,39 @@
+{
+  "name": "dsh-dshai-cognition",
+  "version": "0.4.0",
+  "private": false,
+  "description": "DSHAI 认知内核：单状态根、事件入口、只读 API、最小循环、模型决策、记忆连续性、人格演化与日记",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./self-state": "./lib/self-state.js",
+    "./ports": "./lib/ports/contract.js",
+    "./ports/model": "./lib/ports/model.js",
+    "./model": "./lib/decide/host-model.js",
+    "./ui": "./lib/ui/plugin.js",
+    "./client": "./client.js"
+  },
+  "files": [
+    "lib",
+    "client.js",
+    "README.md",
+    "cordis.patch.yml"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": []
+    }
+  },
+  "scripts": {
+    "test": "node --test --test-isolation=none tests/"
+  },
+  "license": "MIT"
+}

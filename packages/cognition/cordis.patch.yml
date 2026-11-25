@@ -1,0 +1,35 @@
+# dsh-dshai-cognition bundle patch
+# stateRoot 是**顶层配置项**（不在 cognition: 下面），不写死：
+# 默认落在 <DSH_HOME 或 ~/.dsh>/dsh-dshai/cognition；从旧版本升级时把它指到原数据目录。
+# 旧版本用过 bili-fish/cognition-trial，迁移时二选一：改 stateRoot，或把旧目录改名。
+- insert:
+    - id: cognition
+      name: dsh-dshai-cognition
+      config:
+        timeZone: Asia/Shanghai
+        cognition:
+          loop: true
+          model:
+            # ⚠️ 默认关闭。开启后每一次决策/抽取/反思/日记都会产生真实的付费模型调用。
+            # 开启前请确认三件事：① 账号里有余额；② 已想好每天大概花多少；
+            # ③ 如果要限额，先装并配好 dsh-dshai-budget（不装也能跑，只是没有硬限额）。
+            # 想先用零成本模式跑起来：保持 false，认知循环、记忆读写、日记、日程都能工作，
+            # 只是"这一轮说还是不说、做什么"走确定性策略而不是模型判断。
+            enabled: false
+            provider: deepseek-account
+            model: deepseek-flash
+            timeoutMs: 120000
+            # agentPreset 指向宿主里的预设名。全新环境如果没有装配套预设包，
+            # cognition 会跳过挂载并按无预设继续（不会因此让模型调用失败）。
+            agentPreset: dshai
+        recall:
+          mode: p4
+          association: true
+        personality:
+          enabled: true
+        journal:
+          enabled: true
+          debounceMs: 8000
+          autoConsolidate: true
+    - id: cognition-ui
+      name: dsh-dshai-cognition/ui

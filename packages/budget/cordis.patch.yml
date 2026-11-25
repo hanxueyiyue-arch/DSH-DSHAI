@@ -1,0 +1,7 @@
+# dsh-dshai-budget 组合包补丁：只插入注册项，默认不启用。
+# 启用前先在 <DSH_HOME>/dsh-dshai/budget/config.json 配好 limits 与 prices，
+# 否则 cognition 的付费调用会被预算闸门阻断。
+- insert:
+    - id: budget
+      name: dsh-dshai-budget
+      disabled: true

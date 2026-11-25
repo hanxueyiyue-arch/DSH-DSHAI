@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "revision": 1,
+  "note": "倾向种子：只在 behavior.personality.items 为空时，由启动迁移采纳一次（之后她的成长、停用、回滚都不会被种子覆盖）。公开版本默认为空 —— 这里不携带任何来自真实运行环境的人格数据、反思记录或记忆引用。想让新实例从一个预设人格起步，可以在 items 里按下面的格式自己填：每条至少要有 id / label / statement / status（active 或 uncertain）；confidence 取 0~1；support / counter / history 可以省略，由 traits.js 的 normalizePersonality 补默认值。",
+  "items": []
+}

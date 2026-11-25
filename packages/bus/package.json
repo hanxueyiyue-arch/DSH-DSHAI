@@ -1,0 +1,39 @@
+{
+  "name": "dsh-dshai-bus",
+  "version": "0.0.12",
+  "private": false,
+  "type": "module",
+  "description": "DSHAI 公共插件：事件入口、意图执行、工具目录与唤醒调度",
+  "exports": {
+    ".": "./lib/index.js",
+    "./bus": "./lib/bus.js",
+    "./channel-http": "./lib/channel-http.js",
+    "./channels/bili-dm": "./lib/channels/bili-dm.js",
+    "./channels/owner-session": "./lib/channels/owner-session.js",
+    "./tools/bilibili": "./lib/tools/bilibili.js",
+    "./ui": "./lib/ui/plugin.js",
+    "./client": "./client.js"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "cordis.patch.yml",
+    "client.js"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": []
+    }
+  },
+  "scripts": {
+    "test": "node --test --test-isolation=none tests/"
+  },
+  "license": "MIT"
+}

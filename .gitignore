@@ -1,0 +1,73 @@
+# ---------- 依赖与构建产物 ----------
+node_modules/
+/dist/
+*.tgz
+/build/
+/out/
+/coverage/
+*.tsbuildinfo
+
+# ---------- 真实运行数据（含记忆、日记、账号、浏览记录，绝不提交）----------
+# 注意：下面这些目录名在包源码里也存在（cognition/lib/state、cognition/lib/data），
+# 所以必须用前导 / 锚定到仓库根，否则会把核心源码一起排除掉。
+# 新版默认数据目录
+/dsh-dshai/
+# 旧版本用过的目录名（升级后残留也要挡住）
+/bili-fish/
+/state/
+/data/
+/storages/
+/sessions/
+/profiles/
+/traces/
+/trace/
+/logs/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+evolve.sqlite*
+*.jsonl
+
+# ---------- 凭证与个人配置 ----------
+.env
+.env.*
+!.env.example
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*
+secrets*
+/.dsh/
+/DSH_HOME/
+*.local
+config.local.*
+*.private.*
+
+# ---------- 备份与临时文件 ----------
+/backups/
+/backup/
+*.bak
+*.bak-*
+*.backup
+*.backup-*
+*~backup*
+*.orig
+*.rej
+*.tmp
+/tmp/
+/.tmp/
+/.cache/
+*.log
+*.rar
+*.zip
+*.7z
+
+# ---------- 编辑器与系统 ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp

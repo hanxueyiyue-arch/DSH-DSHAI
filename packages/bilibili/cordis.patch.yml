@@ -1,0 +1,12 @@
+# dsh-dshai-bilibili bundle patch
+#
+# 默认三道私信开关全关，所以装上不会读也不会发：
+#   ① socialTransport 默认 none        —— 私信读/发都关（real-read 只读、real-send 读+发）
+#   ② socialAutoGrant 默认 false       —— 扫码成功也不自动签发 dm:owner 的 read/send
+#   ③ ownerMid 默认为空                —— 不绑定用户，需要时手动 socialBind
+# 内容只读（热门/搜索/视频/字幕/弹幕）不受这三道影响，但仍需扫码登录并通过内容许可。
+#
+# 需要时在自己的 profile 里覆盖：ownerMid / socialTransport / socialAutoGrant / intentProvider
+- insert:
+    - id: bilibili
+      name: dsh-dshai-bilibili
