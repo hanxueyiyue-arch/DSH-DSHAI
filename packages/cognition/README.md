@@ -5,7 +5,7 @@ DSHAI 的“认知内核”：一个自我、一个状态根、一个事件入�
 `docs/cognition/ARCHITECTURE.md`）。
 
 **当前状态：0.3.0（记忆连续性 P0–P3）；S3.10 习惯快路径 + 日期解析；S5 预演 + P3/P6 + A1 只读浏览已做（见 `docs/acceptance/`）。S2 的入口/状态根/只读 API 可用；最小循环（默认关闭）
-能走“记安排 → 到点追问 → 回执落账 → 被更正后改口”。模型可参与措辞（默认关闭）；
+能走“记安排 → 到点追问 → 回执落账 → 被更正后改口”。模型可参与措辞（bundle patch 默认开启，见 cordis.patch.yml；代码层未配置时兜底关闭）；
 send/invoke/wake 都通过总线适配器执行并回填 `tool-result`，内核本身没有定时器。
 记忆会按强度变糊，维护事件会把低价值痕迹移入可恢复的归档；主动关心的阈值会随结果
 缓慢移动；同一情境反复成功后，到点追问不再调用审议；最近几轮对话与她的原话会进入
@@ -56,7 +56,7 @@ send/invoke/wake 都通过总线适配器执行并回填 `tool-result`，内核�
 （`precision:'day'`），提醒固定在当天 20:00 本地时间；无年份取下一个未过日期，
 非法日期不写日期。问句（如“之前说的体检怎么样了？”）不会被记成新事实。
 
-### 模型决策（默认关闭）
+### 模型决策（bundle patch 默认开启）
 
 传入 `model` 时，`decide` 改为“模型优先、确定性兜底”：模型输出必须是
 `{action, text, reason, confidence, memoryIds}`，只能引用本次召回里的 id；非法输出、
@@ -252,7 +252,7 @@ lib/state/            # schema、原子读写、store
 lib/api/              # 事件校验、服务窗口
 lib/ports/            # 事件/意图/model/tool-result 词汇表（无实现）
 lib/loop/             # 最小七阶段循环（decide 可注入，act 只交意图）
-lib/decide/           # 模型决策、宿主 LLM 适配器与预算闸门（模型默认关闭）
+lib/decide/           # 模型决策、宿主 LLM 适配器与预算闸门（bundle patch 默认开启，代码层兜底关闭）
 lib/memory/           # 召回适配、写入校验、规则编码、衰减/归档维护 + 迁移来的 BrainMem 算法
 lib/behavior/         # 迁移来的 Autonomy 非决策代码（未接线，S1 备用）
 lib/cycle/            # 仅剩 closed-loop.js：Autonomy 的视频排序与反馈闭环（未接线，S1 备用）
